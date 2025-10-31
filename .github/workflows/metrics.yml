@@ -1,11 +1,105 @@
+# Nome do Workflow
 name: Metrics
+
 on:
-  # Agenda atualizações diárias
+  # Agenda atualizações para rodar a cada 6 horas
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 */6 * * *"
   # Permite executar o workflow manualmente a partir da aba Actions
   workflow_dispatch:
   # (Opcional) Executa o workflow a cada push para a branch principal
   push:
     branches:
       - main
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Necessário para fazer commit do arquivo SVG gerado
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          # ==================================================================
+          # CONFIGURAÇÕES GLOBAIS
+          # ==================================================================
+          
+          # Seu nome de usuário do GitHub
+          user: SEU_NOME_DE_USUARIO
+          
+          # Nome do arquivo SVG que será gerado
+          filename: github-metrics.svg
+          
+          # Token de acesso pessoal armazenado como segredo
+          token: ${{ secrets.METRICS_TOKEN }}
+          
+          # Template base a ser usado (a imagem de referência usa um visual 'clássico')
+          template: classic
+          
+          # Seções do plugin 'base' a serem exibidas
+          base: header, activity, community, repositories, metadata
+          
+          # Fuso horário para cálculos de tempo (ex: hábitos de codificação)
+          config_timezone: America/Sao_Paulo
+
+          # ==================================================================
+          # CONFIGURAÇÕES DOS PLUGINS
+          # ==================================================================
+
+          # Plugin: Introduction (Avatar e nome)
+          plugin_introduction: yes
+          
+          # Plugin: PageSpeed Insights (Desempenho Web)
+          plugin_pagespeed: yes
+          plugin_pagespeed_url: https://seu-website.com # SUBSTITUA PELA SUA URL
+          
+          # Plugin: Isometric Calendar (Calendário de Contribuições)
+          plugin_isocalendar: yes
+          
+          # Plugin: Habits (Hábitos de Codificação)
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_days: 14
+          plugin_habits_facts: no
+          plugin_habits_charts: yes
+          
+          # Plugin: Music (Música Ouvida Recentemente)
+          # NOTA: Requer configuração adicional de segredos para o token do provedor
+          plugin_music: yes
+          plugin_music_provider: spotify # ou apple, lastfm
+          plugin_music_mode: recent
+          plugin_music_limit: 3
+          
+          # Plugin: Languages (Análise de Linguagens)
+          plugin_languages: yes
+          plugin_languages_limit: 8
+          plugin_languages_threshold: 0%
+          plugin_languages_ignored: >-
+            html, css
+          
+          # Plugin: Topics (Tecnologias e Tópicos)
+          plugin_topics: yes
+          plugin_topics_mode: icons
+          plugin_topics_limit: 15
+          
+          # Plugin: Projects (Acompanhamento de Projetos)
+          plugin_projects: yes
+          plugin_projects_limit: 1
+          plugin_projects_repositories: SEU_NOME_DE_USUARIO/SEU_REPOSITORIO/NUMERO_DO_PROJETO # SUBSTITUA
+
+          # ==================================================================
+          # PERSONALIZAÇÃO DE TEMA (CSS)
+          # ==================================================================
+          extras_css: |
+            svg {
+              background-color: #0d1117;
+            }
+           .header, text {
+              fill: #c9d1d9;
+            }
+           .header h2 {
+              fill: #58a6ff;
+            }
+           .chart-background {
+              fill: rgba(255, 255, 255, 0.05);
+            }
