@@ -1,1 +1,11 @@
-
+name: Metrics
+on:
+  # Agenda atualizações diárias
+  schedule:
+    - cron: "0 0 * * *"
+  # Permite executar o workflow manualmente a partir da aba Actions
+  workflow_dispatch:
+  # (Opcional) Executa o workflow a cada push para a branch principal
+  push:
+    branches:
+      - main
