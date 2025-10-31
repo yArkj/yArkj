@@ -25,7 +25,7 @@ jobs:
           # ==================================================================
           
           # Seu nome de usuário do GitHub
-          user: SEU_NOME_DE_USUARIO
+          user: yArkj
           
           # Nome do arquivo SVG que será gerado
           filename: github-metrics.svg
